@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class UserDAO {
+public class UserDAO { // DAO : Database Access Object - 데이터베이스 접근 객체
 	
 	private Connection conn;
 	private PreparedStatement pstmt;
@@ -43,5 +43,23 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		return -2; //데이터베이스 오류 
+		
 	} // 로그인 기능 구현 완료
+	
+	public int join(User user) {
+		String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?)";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, user.getUserID());
+			pstmt.setString(2, user.getUserPassword());
+			pstmt.setString(3, user.getUserName());
+			pstmt.setString(4, user.getUserGender());
+			pstmt.setString(5, user.getUserEmail());
+			return pstmt.executeUpdate(); // 0이상의 숫자가 반환됨 
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1; // 데이터베이스 오류
+	}
+	
 }
