@@ -37,7 +37,11 @@
 			script.println("</script>");
 		} else {
 			UserDAO userDAO = new UserDAO();
-			int result = userDAO.join(user); // 입력받은 user라는 인스턴스가 join함수를 실행하도록 매개변수로 들어감
+			System.out.print(user.toString());
+			int result = -1;
+			
+			//result = userDAO.join(user); // 입력받은 user라는 인스턴스가 join함수를 실행하도록 매개변수로 들어감
+			
 			if (result == -1) { // 데이터베이스 오류가 발생할 유일한 경우는 아이디가 겹치는 경우
 				PrintWriter script = response.getWriter(); 
 				script.println("<script>");

@@ -25,6 +25,7 @@ public class UserDAO { // DAO : Database Access Object - 데이터베이스 접�
 		}
 	}
 
+	
 	public int login(String userID, String userPassword) {
 		String SQL = "SELECT userPassword FROM USER WHERE userID = ?";
 		try {
@@ -47,7 +48,7 @@ public class UserDAO { // DAO : Database Access Object - 데이터베이스 접�
 	} // 로그인 기능 구현 완료
 	
 	public int join(User user) {
-		String SQL = "INSERT INTO USER VALUES (?, ?, ?, ?, ?)";
+		String SQL = "INSERT INTO USER VALUES (?,?,?,?,?)";
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, user.getUserID());
