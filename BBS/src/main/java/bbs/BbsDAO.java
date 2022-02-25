@@ -1,9 +1,10 @@
-package src.bbs;
+package bbs;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.*;
 
 public class BbsDAO {
 	private Connection conn;
@@ -27,6 +28,7 @@ public class BbsDAO {
 		String SQL = "SELECT NOW()";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				return rs.getString(1);
 			}
@@ -40,6 +42,7 @@ public class BbsDAO {
 		String SQL = "SELECT bbsID FROM BBS ORDER BY bbsID DESC";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1) + 1;
 			}
@@ -59,11 +62,49 @@ public class BbsDAO {
 			pstmt.setString(3,  userID);
 			pstmt.setString(4,  getDate());
 			pstmt.setString(5,  bbsContent);
-			pstmt.setInt(6,  1);
+			pstmt.setInt(6, 1);
 			return pstmt.executeUpdate(); 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return -1; // 데이터베이스 오류
+	}
+	
+	public ArrayList<Bbs> getList(int pageNumber) {
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+		ArrayList<Bbs> list = new ArrayList<Bbs>();
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1,  getNext() - (pageNumber -1)*10);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				list.add(bbs);
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public boolean nextPage(int pageNumber) { // 다음 페이지가 있는지 
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1,  getNext() - (pageNumber -1)*10);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

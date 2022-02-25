@@ -1,14 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="src.bbs.BbsDAO" %>
+<%@ page import="bbs.BbsDAO" %>
 <%@ page import="java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="bbs" class="src.bbs.Bbs" scope="page" />
+<jsp:useBean id="bbs" class="bbs.Bbs" scope="page" />
 <jsp:setProperty name="bbs" property="bbsTitle" />
 <jsp:setProperty name="bbs" property="bbsContent" />
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title> JSP 게시판 웹사이트 </title>
 </head>
